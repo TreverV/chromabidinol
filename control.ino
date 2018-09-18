@@ -1,22 +1,21 @@
-// This #include statement was automatically added by the Particle IDE.
+
 #include <neopixel.h>
 #include "application.h"
-#define PIN D0
 
-// Parameter 1 = number of pixels in strip
-// Parameter 2 = Arduino pin number (most are valid)
-// Parameter 3 = pixel type flags, add together as needed:
-//   NEO_KHZ800  800 KHz bitstream (most NeoPixel products w/WS2812 LEDs)
-//   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
-//   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
-//   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
-//   NEO_RGBW    Pixels are wired for RGBW bitstream (NeoPixel RGBW products)
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(54, PIN, WS2812B);
-uint32_t engie_blue = strip.Color(0, 99, 255);
-// IMPORTANT: To reduce NeoPixel burnout risk, add 1000 uF capacitor across
-// pixel power leads, add 300 - 500 Ohm resistor on first pixel's data input
-// and minimize distance between Arduino and first pixel.  Avoid connecting
-// on a live circuit...if you must, connect GND first.
+#define PIXEL_PIN D0
+#define PIXEL_COUNT 54
+#define PIXEL_TYPE WS2812B
+
+#define PEACH 200,50,5
+#define CYAN 10,150,70
+#define PURPLE 180,3,180
+#define BLUE 5,5,190
+#define WHITE 150,150,150
+#define GREEN 10,180,10
+
+#define ENGIE_BLUE 0,99,55
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, PIXEL_TYPE);
 
 void setup() {
   strip.begin();
@@ -24,42 +23,30 @@ void setup() {
 }
 
 void loop() {
-  /*
-  // Some example procedures showing how to display to the pixels:
+  /* Some example procedures showing how to display to the pixels:
   colorWipe(strip.Color(255, 0, 0), 50); // Red
   colorWipe(strip.Color(0, 255, 0), 50); // Green
   colorWipe(strip.Color(0, 0, 255), 50); // Blue
-  
+
   // Send a theater pixel chase in...
   theaterChase(strip.Color(127, 127, 127), 50); // White
   theaterChase(strip.Color(127, 0, 0), 50); // Red
   theaterChase(strip.Color(0, 0, 127), 50); // Blue
+  theaterChaseRainbow(50);
   */
-  //rainbow(20);
   rainbowCycle(10);
-  //theaterChaseRainbow(50);
+
+  // User defined functions
   //fadeOn();
   //fadeOff();
-  
-  
+
+
 }
 
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
     strip.setPixelColor(i, c);
-    strip.show();
-    delay(wait);
-  }
-}
-
-void rainbow(uint8_t wait) {
-  uint16_t i, j;
-
-  for(j=0; j<256; j++) {
-    for(i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel((i+j) & 255));
-    }
     strip.show();
     delay(wait);
   }
@@ -151,4 +138,15 @@ void fadeOff(){
     }
 }
 
-
+void spin(int R, int G, int B) {
+    for(i=0; i < PIXEL_COUNT; i++) {
+        strip.setPixelColor(i, R,G,B);
+        strip.show();
+        delay(waitTime);
+    }
+    for(i=0; i < PIXEL_COUNT; i++) {
+        strip.setPixelColor(i, 0,0,0);
+        strip.show();
+        delay(waitTime);
+    }
+}
