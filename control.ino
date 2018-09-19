@@ -1,4 +1,3 @@
-
 #include <neopixel.h>
 #include "application.h"
 
